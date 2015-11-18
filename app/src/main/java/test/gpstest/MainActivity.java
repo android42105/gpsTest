@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView coordinates;
+    private Button trackButton;
+    private boolean isTracking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //test
         coordinates = (TextView)findViewById(R.id.coordinates);
+        trackButton = (Button)findViewById(R.id.trackButton);
     }
 
     @Override
@@ -41,15 +45,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startTrack(View v){
-        coordinates.setText("start...");
+    //method to control tracking
+    public void controlTrack(View v){
+
+        if(isTracking){
+            this.isTracking = false;
+            trackButton.setText(R.string.track_start);
+
+        } else if(!isTracking){
+            this.isTracking = true;
+            coordinates.setText("start...");
+            trackButton.setText(R.string.track_stop);
+        }
+
+
     }
-
-    public void stopTrack(View v){
-        coordinates.setText("stop...");
-    }
-
-
 
 
 
