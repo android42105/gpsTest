@@ -46,22 +46,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //method to control tracking
-    public void controlTrack(View v){
+    public void controlTrack(View v) {
 
-        if(isTracking){
+        if(isTracking) {
             this.isTracking = false;
             trackButton.setText(R.string.track_start);
-
-        } else if(!isTracking){
+        } else if(!isTracking) {
             this.isTracking = true;
             coordinates.setText("start...");
             trackButton.setText(R.string.track_stop);
         }
-
-
     }
-
-
-
 
 }
