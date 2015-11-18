@@ -4,14 +4,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //test
+        coordinates = (TextView)findViewById(R.id.coordinates);
     }
 
     @Override
@@ -35,4 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void startTrack(View v){
+        coordinates.setText("start...");
+    }
+
+    public void stopTrack(View v){
+        coordinates.setText("stop...");
+    }
+
+
+
+
+
+
 }

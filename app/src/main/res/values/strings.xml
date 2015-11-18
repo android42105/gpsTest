@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">gpsTest</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    // Strings for MainActivity
+    <string name="track_start">start tracking</string>
+    <string name="track_stop">stop tracking</string>
+
+    <string name="action_settings">stop tracking</string>
+
+
 </resources>
