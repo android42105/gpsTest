@@ -1,61 +1,46 @@
 package test.gpstest;
 
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView coordinates;
     private Button trackButton;
-    private boolean isTracking = false;
+    private GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //test
-        coordinates = (TextView)findViewById(R.id.coordinates);
-        trackButton = (Button)findViewById(R.id.trackButton);
+
+        // assigning the button and textview
+        this.coordinates = (TextView) findViewById(R.id.coordinates);
+        this.trackButton = (Button) findViewById(R.id.trackButton);
+
+        // creating new GPSTracker objects with context.
+       this.gps = new GPSTracker(this);
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     //method to control tracking
+    // mit getLocation wird geschaut, ob GPS an ist und danach wird die location geholt.
+    // Das Problem hier ist, das dies nur einmal passiert, bei jedem Knopfdruck.
+    // Die Funktion, kontinuierlich GPS daten zu laden muss in einem AsyncTask geschehen.
     public void controlTrack(View v) {
 
-        if(isTracking) {
-            this.isTracking = false;
-            trackButton.setText(R.string.track_start);
-        } else if(!isTracking) {
-            this.isTracking = true;
-            coordinates.setText("start...");
-            trackButton.setText(R.string.track_stop);
+        gps.getLocation();
+        if(gps.canGetLocation()) {
+            coordinates.setText("latitide = "+ gps.getLatitude()+" longitude = "+ gps.getLongitude());
         }
+
     }
+
 
 }
