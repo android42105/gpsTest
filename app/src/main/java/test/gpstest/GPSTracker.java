@@ -25,8 +25,6 @@ public class GPSTracker extends Service implements LocationListener {
     private boolean canGetLocation = false;
 
     private Location location;
-    private double latitude;
-    private double longitude;
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
@@ -52,27 +50,21 @@ public class GPSTracker extends Service implements LocationListener {
             // getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            if (!isGPSEnabled ) {
+            if (!isGPSEnabled) {
                 // no network provider is enabled
                 Toast.makeText(mContext, "GPS is not enabled", Toast.LENGTH_SHORT).show();
-            } else if(isGPSEnabled){
-                    this.canGetLocation = true;
-                    if (location == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
+            } else if (isGPSEnabled) {
+                this.canGetLocation = true;
+                if (location == null) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     }
                 }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +76,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Calling this function will stop using GPS in your app
-     *
+     * <p/>
      * supressing the 'checkPermission' thingy because i know the manifest includes permissions.
      */
     @SuppressWarnings("ResourceType")
@@ -96,24 +88,20 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to get latitude
+     *
+     * @return 0.0 if location == null;
      */
     public double getLatitude() {
-        if (location != null) {
-            latitude = location.getLatitude();
-        }
-
-        return latitude;
+        return location.getLatitude();
     }
 
     /**
      * Function to get longitude
+     *
+     * @return 0.0 if location == null;
      */
     public double getLongitude() {
-        if (location != null) {
-            longitude = location.getLongitude();
-        }
-
-        return longitude;
+        return location.getLongitude();
     }
 
     /**
