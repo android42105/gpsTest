@@ -19,6 +19,7 @@
         android:onClick="controlTrack"
         android:layout_gravity="center_horizontal" />
 
+
     <TextView
         android:id="@+id/coordinates"
         android:text="0 || 0"

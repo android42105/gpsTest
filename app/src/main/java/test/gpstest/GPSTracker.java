@@ -88,21 +88,24 @@ public class GPSTracker extends Service implements LocationListener {
 
     /**
      * Function to get latitude
-     *
-     * @return 0.0 if location == null;
      */
     public double getLatitude() {
-        return location.getLatitude();
+        if (location != null) {
+            return location.getLatitude();
+        }
+        return 0;
     }
 
     /**
      * Function to get longitude
-     *
-     * @return 0.0 if location == null;
      */
     public double getLongitude() {
-        return location.getLongitude();
+        if (location != null) {
+            return location.getLongitude();
+        }
+        return 0;
     }
+
 
     /**
      * Function to check GPS/wifi enabled.
