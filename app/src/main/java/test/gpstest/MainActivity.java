@@ -37,14 +37,10 @@ public class MainActivity extends AppCompatActivity {
     public void controlTrack(View v) {
 
         if(!gps.canGetLocation()){
-            Toast.makeText(this, "GPS is not enabled", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No GPS or Network connection...", Toast.LENGTH_SHORT).show();
         }
-
         gps.getLocation();
-        if (gps.canGetLocation()) {
-            coordinates.setText("latitide = " + gps.getLatitude() + " longitude = " + gps.getLongitude());
-        }
-
+        coordinates.setText("latitide = " + gps.getLatitude() + " longitude = " + gps.getLongitude());
     }
 
 

@@ -17,56 +17,80 @@ public class GPSTracker implements LocationListener {
 
     // flag for GPS status
     private boolean isGPSEnabled = false;
-
+    //flag for Network status
+    private boolean isNetworkEnabled = false;
     private boolean canGetLocation = false;
-
     private Location location;
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
-
     // Declaring a Location Manager
-    protected LocationManager locationManager;
+    private LocationManager locationManager;
+    // The minimum distance to change Updates in meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = (1000 * 60 * 1) / 6; // 10 sec
 
     /**
      * Constructor
      *
-     * @param context must not be null
+     * @param context must not be null, should be passed from activity.
      */
     public GPSTracker(Context context) {
         this.mContext = context;
     }
 
+
+    /**
+     * Fetches location based on the provider.
+     * <p/>
+     * prioritieses NETWORK over GPS.
+     *
+     * @return the current location.
+     */
+    //TODO getLocation should be async as to continously fetch location.
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext.getSystemService(Service.LOCATION_SERVICE);
+            this.locationManager = (LocationManager) mContext.getSystemService(Service.LOCATION_SERVICE);
+            // getting network status
+            this.isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             // getting GPS status
-            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            this.isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            if (isGPSEnabled) {
-                this.canGetLocation = true;
-
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                if (locationManager != null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                }
-            } else {
+            if (isNetworkEnabled) {
+                locateWith(LocationManager.NETWORK_PROVIDER);
+            } else if (isGPSEnabled) {
+                locateWith(LocationManager.GPS_PROVIDER);
+            } else if (!isNetworkEnabled && !isGPSEnabled) {
                 this.canGetLocation = false;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return location;
     }
 
+
+    /**
+     * Locates a location with a specific Type of Provider.
+     *
+     * @param locationType GPS_PROVIDER or NETWORK_PROVIDER
+     * @return true if no error occured, false if location could not be fetched.
+     */
+    private boolean locateWith(String locationType) {
+        this.canGetLocation = true;
+        try {
+            locationManager.requestLocationUpdates(
+                    locationType,
+                    MIN_TIME_BW_UPDATES,
+                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+            this.location = locationManager.getLastKnownLocation(locationType);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     /**
      * Calling this function will stop using GPS in your app
