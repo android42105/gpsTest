@@ -2,20 +2,16 @@ package test.gpstest;
 
 import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
 
 
 /**
  * Class for tracking location via GPS.
  */
-public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker implements LocationListener {
 
     private final Context mContext;
 
@@ -27,7 +23,7 @@ public class GPSTracker extends Service implements LocationListener {
     private Location location;
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
 
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
@@ -46,24 +42,22 @@ public class GPSTracker extends Service implements LocationListener {
 
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) mContext.getSystemService(Service.LOCATION_SERVICE);
             // getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            if (!isGPSEnabled) {
-                // no network provider is enabled
-                Toast.makeText(mContext, "GPS is not enabled", Toast.LENGTH_SHORT).show();
-            } else if (isGPSEnabled) {
+            if (isGPSEnabled) {
                 this.canGetLocation = true;
-                if (location == null) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    }
+
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 }
+            } else {
+                this.canGetLocation = false;
             }
 
         } catch (Exception e) {
@@ -135,8 +129,4 @@ public class GPSTracker extends Service implements LocationListener {
 
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 }

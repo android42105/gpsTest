@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         this.trackButton = (Button) findViewById(R.id.trackButton);
 
         // creating new GPSTracker objects with context.
-       this.gps = new GPSTracker(this);
+        this.gps = new GPSTracker(this);
 
     }
 
@@ -35,9 +36,13 @@ public class MainActivity extends AppCompatActivity {
     // Die Funktion, kontinuierlich GPS daten zu laden muss in einem AsyncTask geschehen.
     public void controlTrack(View v) {
 
+        if(!gps.canGetLocation()){
+            Toast.makeText(this, "GPS is not enabled", Toast.LENGTH_SHORT).show();
+        }
+
         gps.getLocation();
-        if(gps.canGetLocation()) {
-            coordinates.setText("latitide = "+ gps.getLatitude()+" longitude = "+ gps.getLongitude());
+        if (gps.canGetLocation()) {
+            coordinates.setText("latitide = " + gps.getLatitude() + " longitude = " + gps.getLongitude());
         }
 
     }
