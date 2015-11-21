@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "No GPS or Network connection...", Toast.LENGTH_SHORT).show();
         }
         gps.getLocation();
-        coordinates.setText("latitide = " + gps.getLatitude() + " longitude = " + gps.getLongitude());
+        coordinates.setText("Breitengrad: " + gps.getLatitude()+"°\n" + "Längengrad: " + gps.getLongitude()+"°");
     }
 
 
