@@ -1,7 +1,10 @@
 package test.gpstest;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -12,10 +15,16 @@ public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
+    private Location location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //getting location data from mainactivity intent call.
+        this.location = getIntent().getParcelableExtra("location");
+
         setUpMapIfNeeded();
     }
 
@@ -60,6 +69,6 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(this.location.getLatitude(), this.location.getLongitude())).title("Marker"));
     }
 }

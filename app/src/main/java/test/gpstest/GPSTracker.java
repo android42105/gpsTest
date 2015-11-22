@@ -13,9 +13,7 @@ import android.os.Bundle;
  */
 public class GPSTracker implements LocationListener {
 
-    private final Context mContext;
-
-    // flag for GPS status
+     // flag for GPS status
     private boolean isGPSEnabled = false;
     //flag for Network status
     private boolean isNetworkEnabled = false;
@@ -35,7 +33,8 @@ public class GPSTracker implements LocationListener {
      * @param context must not be null, should be passed from activity.
      */
     public GPSTracker(Context context) {
-        this.mContext = context;
+
+        this.locationManager = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
     }
 
 
@@ -48,8 +47,8 @@ public class GPSTracker implements LocationListener {
      */
     //TODO getLocation should be async as to continously fetch location.
     public Location getLocation() {
+
         try {
-            this.locationManager = (LocationManager) mContext.getSystemService(Service.LOCATION_SERVICE);
             // getting network status
             this.isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             // getting GPS status
@@ -129,6 +128,7 @@ public class GPSTracker implements LocationListener {
      * Function to check GPS/wifi enabled.
      */
     public boolean canGetLocation() {
+
         return this.canGetLocation;
     }
 

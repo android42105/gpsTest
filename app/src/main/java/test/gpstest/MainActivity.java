@@ -2,9 +2,10 @@ package test.gpstest;
 
 
 import android.app.Activity;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,8 @@ public class MainActivity extends Activity {
     private Button trackButton;
     private GPSTracker gps;
 
+    private Location location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,10 @@ public class MainActivity extends Activity {
 
         // creating new GPSTracker objects with context.
         this.gps = new GPSTracker(this);
-
+        //set default location to avoid nullchecks
+        this.location = new Location("");
+        this.location.setLatitude(0.0);
+        this.location.setLatitude(0.0);
     }
 
 
@@ -48,11 +54,13 @@ public class MainActivity extends Activity {
     // Die Funktion, kontinuierlich GPS daten zu laden muss in einem AsyncTask geschehen.
     public void controlTrack(View v) {
 
-        if (!gps.canGetLocation()) {
-            Toast.makeText(this, "No GPS or Network connection...", Toast.LENGTH_SHORT).show();
+        if (null != gps.getLocation()) {
+            Toast.makeText(this, "fetching ... please wait", Toast.LENGTH_LONG).show();
+            this.location = gps.getLocation();
+            coordinates.setText("Breitengrad: " + this.location.getLatitude() + "°\n" + "Längengrad: " + this.location.getLongitude() + "°");
+        } else {
+            Toast.makeText(this, "could not get location", Toast.LENGTH_SHORT).show();
         }
-        gps.getLocation();
-        coordinates.setText("Breitengrad: " + gps.getLatitude() + "°\n" + "Längengrad: " + gps.getLongitude() + "°");
     }
 
     @Override
@@ -67,11 +75,21 @@ public class MainActivity extends Activity {
                 x2 = event.getX();
                 float deltaX = x1 - x2;
                 if (deltaX > MIN_DISTANCE) {
-                    Toast.makeText(this, "right 2 left swipe with " + MIN_DISTANCE, Toast.LENGTH_SHORT).show();
+                    swipeRight2Left();
                 }
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * calls the maps activity if a right2left swipe is registered.
+     */
+    private void swipeRight2Left() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("location", this.location);
+        startActivity(intent);
+        finish();
     }
 
 }
