@@ -3,9 +3,8 @@ package test.gpstest;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -69,6 +68,9 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(this.location.getLatitude(), this.location.getLongitude())).title("Marker"));
+        double lat = this.location.getLatitude();
+        double lng = this.location.getLongitude();
+        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Marker"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
     }
 }
