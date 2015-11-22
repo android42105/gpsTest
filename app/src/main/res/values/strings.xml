@@ -5,8 +5,10 @@
     <string name="track_start">start tracking</string>
     <string name="track_stop">stop tracking</string>
     <string name="altilongi">Breitengrad: 0.0°\nLängengrad: 0.0°</string>
-
     <string name="action_settings">stop tracking</string>
+
+    // Strings for Map Activity
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>
